@@ -66,6 +66,35 @@ class PlaylistSongsService {
     }
   }
 
+  async addToActivities(playlistId, songId, userId, action) {
+    const id = `activities-${nanoid(16)}`;
+    const time = new Date().toISOString();
+    const query = {
+      text: 'INSERT INTO activities VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
+      values: [id, playlistId, songId, userId, action, time],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rows.length) {
+      throw new InvariantError('Gagal menambahkan aktivitas');
+    }
+  }
+
+  async getActivities(playlistId) {
+    const query = {
+      text: `select users.username, songs.title, activities.action, activities.time 
+      FROM activities
+      RIGHT JOIN users ON users.id = activities.user_id
+      RIGHT JOIN songs ON songs.id = activities.song_id
+      WHERE activities.playlist_id = $1`,
+      values: [playlistId],
+    };
+
+    const result = await this._pool.query(query);
+    return result.rows;
+  }
+
 }
 
 module.exports = PlaylistSongsService;
