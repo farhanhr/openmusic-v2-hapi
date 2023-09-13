@@ -10,7 +10,7 @@ class PlaylistsService {
     this._collaborationService = collaborationService;
   }
 
-  async addPlaylist({name, owner}) {
+  async addPlaylist({ name, owner }) {
     const id = `playlist-${nanoid(16)}`;
 
     const query = {
@@ -20,7 +20,7 @@ class PlaylistsService {
 
     const result = await this._pool.query(query);
 
-    if(!result.rows[0].id) {
+    if (!result.rows[0].id) {
       throw new InvariantError('Gagal menambahkan playlist');
     }
 
@@ -40,14 +40,14 @@ class PlaylistsService {
     return result.rows;
   }
 
-  async getPlaylistById(playlist_id) {
+  async getPlaylistById(playlistId) {
     const query = {
       text: `SELECT playlists.id, playlists.name, users.username 
       FROM playlists
       LEFT JOIN users ON users.id = playlists.owner
       LEFT JOIN collaborations ON collaborations.playlist_id = playlists.id
       WHERE playlists.id = $1`,
-      values: [playlist_id],
+      values: [playlistId],
     };
     const result = await this._pool.query(query);
 
@@ -90,16 +90,16 @@ class PlaylistsService {
     }
   }
 
-  async verifyPlaylistAccess(playlist_id, user_id) {
-    try{
-    await this.verifyPlaylistOwner(playlist_id, user_id);
+  async verifyPlaylistAccess(playlistId, userId) {
+    try {
+      await this.verifyPlaylistOwner(playlistId, userId);
     } catch (error) {
       if (error instanceof NotFoundError) {
         throw error;
       }
 
       try {
-        await this._collaborationService.verifyCollaborator(playlist_id, user_id);
+        await this._collaborationService.verifyCollaborator(playlistId, userId);
       } catch {
         throw error;
       }

@@ -1,4 +1,3 @@
-
 const { Pool } = require('pg');
 const InvariantError = require('../../exceptions/InvariantError');
 
@@ -34,7 +33,7 @@ class AuthenticationsService {
       text: 'DELETE FROM authentications WHERE token = $1',
       values: [token],
     };
-    
+
     await this._pool.query(query);
   }
 }

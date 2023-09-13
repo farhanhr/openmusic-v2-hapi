@@ -10,7 +10,7 @@ class UsersService {
     this._pool = new Pool();
   }
 
-  async addUser({username, password, fullname}) {
+  async addUser({ username, password, fullname }) {
     await this.verifyNewUsername(username);
 
     const id = `user-${nanoid(16)}`;
@@ -27,7 +27,6 @@ class UsersService {
     }
 
     return result.rows[0].id;
-
   }
 
   async verifyNewUsername(username) {
@@ -70,7 +69,7 @@ class UsersService {
       throw new AuthenticationError('Kredensial yang anda berikan salah');
     }
 
-    const {id, password: cryptedPassword } = result.rows[0];
+    const { id, password: cryptedPassword } = result.rows[0];
 
     const match = await bcrypt.compare(password, cryptedPassword);
 

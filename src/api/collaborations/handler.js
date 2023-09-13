@@ -1,4 +1,3 @@
-
 class CollaborationsHandler {
   constructor(collaborationsService, playlistsService, usersService, validator) {
     this._collaborationsService = collaborationsService;

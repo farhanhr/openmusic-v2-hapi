@@ -12,12 +12,12 @@ const UsersService = require('./services/postgres/UsersService');
 const UsersValidator = require('./validator/users');
 const authentications = require('./api/authentications');
 const AuthenticationsService = require('./services/postgres/AuthenticationsService');
-const TokenManager = require('./tokenize/TokenManager')
+const TokenManager = require('./tokenize/TokenManager');
 const AuthenticationsValidator = require('./validator/authentications');
 const playlists = require('./api/playlists');
 const PlaylistsService = require('./services/postgres/PlaylistsService');
 const PlaylistsValidator = require('./validator/playlists');
-const playlist_songs = require('./api/playlist_songs');
+const playlistSongs = require('./api/playlist_songs');
 const PlaylistSongsService = require('./services/postgres/PlaylistSongsService');
 const PlaylistSongsValidator = require('./validator/playlist_songs');
 const collaborations = require('./api/collaborations');
@@ -106,7 +106,7 @@ const init = async () => {
       },
     },
     {
-      plugin: playlist_songs,
+      plugin: playlistSongs,
       options: {
         playlistSongsService,
         playlistsService,
@@ -148,7 +148,7 @@ const init = async () => {
       newResponse.code(500);
       return newResponse;
     }
-  
+
     return h.continue;
   });
 
